@@ -3,15 +3,33 @@ require "uri"
 
 module HipChat
 
-  def self.send_message_to_hipchat!(message, settings)
+  def self.send_message_to_hipchat!(message, settings, action)
     raise "Please set hipchat_auth_token" if settings.hipchat_auth_token.blank?
     raise "Please set hipchat_room_id" if settings.hipchat_room_id.blank?
+
+    # valid colors
+    # "yellow", "red", "green", "purple", "gray", or "random"
+    color = ""
+
+    case action
+    when "created-topic"
+      color = "purple"
+    when "created-post"
+      color = "green"
+    when "deleted-topic"
+      color = "red"
+    when "deleted-post"
+      color = "red"
+    when "recovered-topic"
+      color = "gray"
+    when "recovered-post"
+      color = "gray"
 
     params = {
       "auth_token" => settings.hipchat_auth_token,
       "room_id" => settings.hipchat_room_id,
       "from" => (settings.hipchat_message_from or "Discourse"),
-      "color" => (settings.hipchat_message_color or "green"),
+      "color" => color,
       "message_format" => "html",
       "message" => message
     }
@@ -37,17 +55,17 @@ module HipChat
       topic_markup = "topic: <a href=\"#{topic.url}\">#{topic.title}</a>"
 
       if action=="created-topic" then
-        send_message_to_hipchat! "#{category_markup}#{user_markup} started #{topic_markup}", settings
+        send_message_to_hipchat! "#{category_markup}#{user_markup} started #{topic_markup}", settings, action
       elsif action=="recovered-topic" then
-        send_message_to_hipchat! "#{category_markup}#{user_markup} recovered #{topic_markup}", settings
+        send_message_to_hipchat! "#{category_markup}#{user_markup} recovered #{topic_markup}", settings, action
       elsif action=="deleted-topic" then
-        send_message_to_hipchat! "#{category_markup}#{user_markup} deleted #{topic_markup}", settings
+        send_message_to_hipchat! "#{category_markup}#{user_markup} deleted #{topic_markup}", settings, action
       elsif action=="created-post" then
-        send_message_to_hipchat! "#{category_markup}#{user_markup} posted to #{topic_markup}", settings
+        send_message_to_hipchat! "#{category_markup}#{user_markup} posted to #{topic_markup}", settings, action
       elsif action=="deleted-post" then
-        send_message_to_hipchat! "#{category_markup}#{user_markup} deleted a post in #{topic_markup}", settings
+        send_message_to_hipchat! "#{category_markup}#{user_markup} deleted a post in #{topic_markup}", settings, action
       elsif action=="recovered-post" then
-        send_message_to_hipchat! "#{category_markup}#{user_markup} recovered a post in #{topic_markup}", settings
+        send_message_to_hipchat! "#{category_markup}#{user_markup} recovered a post in #{topic_markup}", settings, action
       end
     rescue => e
       Rails.logger.error e.message + "\n" + e.backtrace.join("\n")
