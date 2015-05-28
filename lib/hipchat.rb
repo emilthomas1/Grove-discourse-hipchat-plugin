@@ -24,6 +24,7 @@ module HipChat
       color = "gray"
     when "recovered-post"
       color = "gray"
+    end
 
     params = {
       "auth_token" => settings.hipchat_auth_token,
