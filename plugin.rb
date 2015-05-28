@@ -1,8 +1,8 @@
 # name: hipchat
 # about: HipChat reporting for Discourse
 # version: 1.0
-# authors: antonin@binaryage.com
-# url: https://github.com/binaryage/discourse-hipchat-plugin
+# authors: michael@grovelabs.io, antonin@binaryage.com
+# url: https://github.com/grovelabs/discourse-hipchat-plugin
 
 require_relative './lib/hipchat'
 

@@ -7,5 +7,5 @@ plugins:
     default: ""
   hipchat_message_from:
     default: "Discourse"
-  hipchat_message_color:
-    default: "green"
+  # hipchat_message_color:
+  #   default: "green"
